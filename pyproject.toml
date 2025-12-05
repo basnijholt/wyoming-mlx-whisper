@@ -62,6 +62,17 @@ ignore = [
 [tool.ruff.lint.isort]
 known-first-party = ["wyoming_mlx_whisper"]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",    # assert allowed in tests
+    "SLF001",  # private member access allowed in tests
+    "PLR2004", # magic values allowed in tests
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
 [tool.mypy]
 python_version = "3.10"
 warn_return_any = true
