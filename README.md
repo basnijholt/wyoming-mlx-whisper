@@ -15,8 +15,8 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
 |-------|------|-------|---------|
 | [`mlx-community/whisper-tiny`](https://huggingface.co/mlx-community/whisper-tiny) | 75 MB | ⚡⚡⚡ Fastest | Basic |
 | [`mlx-community/whisper-small-mlx`](https://huggingface.co/mlx-community/whisper-small-mlx) | 481 MB | ⚡⚡ Fast | Good |
-| [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) | 1.6 GB | ⚡ Medium | **Best** (default) |
-| [`mlx-community/whisper-large-v3-turbo-q4`](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) | 464 MB | ⚡ Medium | Near-best |
+| [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) | 1.6 GB | ⚡⚡ Near real-time | **Best** (default) |
+| [`mlx-community/whisper-large-v3-turbo-q4`](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) | 464 MB | ⚡⚡ Near real-time | Near-best |
 
 Use `--model <name>` to select a different model.
 
