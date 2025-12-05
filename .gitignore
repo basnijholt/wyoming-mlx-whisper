@@ -8,6 +8,7 @@ tmp/
 *.egg-info/
 build
 htmlcov
+.coverage
 
 /.venv/
 .mypy_cache/

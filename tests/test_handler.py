@@ -164,3 +164,49 @@ class TestWhisperEventHandler:
         mock_mlx.transcribe.assert_called_once()
         call_args = mock_mlx.transcribe.call_args
         assert call_args.kwargs["path_or_hf_repo"] == handler._model
+
+    @pytest.mark.asyncio
+    async def test_transcribe_with_language(
+        self,
+        mock_wyoming_info: Info,
+        mock_model: str,
+    ) -> None:
+        """Test that _transcribe passes language when set."""
+        handler = WhisperEventHandler(
+            mock_wyoming_info,
+            mock_model,
+            language="en",
+            reader=MagicMock(),
+            writer=MagicMock(),
+        )
+        audio = np.zeros(16000, dtype=np.float32)
+
+        with patch("wyoming_mlx_whisper.handler.mlx_whisper") as mock_mlx:
+            mock_mlx.transcribe.return_value = {"text": "hello"}
+            result = handler._transcribe(audio)
+
+        assert result == "hello"
+        call_args = mock_mlx.transcribe.call_args
+        assert call_args.kwargs["language"] == "en"
+
+    @pytest.mark.asyncio
+    async def test_handle_transcribe_event(self, handler: WhisperEventHandler) -> None:
+        """Test handling of Transcribe event."""
+        from wyoming.asr import Transcribe
+
+        event = Transcribe().event()
+        result = await handler.handle_event(event)
+
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_handle_unknown_event(self, handler: WhisperEventHandler) -> None:
+        """Test handling of unknown event type."""
+        from wyoming.event import Event
+
+        # Create an event with an unknown type
+        event = Event(type="unknown-event-type")
+        result = await handler.handle_event(event)
+
+        # Should return True (continue processing)
+        assert result is True

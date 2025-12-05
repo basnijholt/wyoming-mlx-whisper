@@ -78,6 +78,9 @@ known-first-party = ["wyoming_mlx_whisper"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "--cov=wyoming_mlx_whisper --cov-report=term-missing"
+filterwarnings = [
+    "ignore:coroutine .* was never awaited:RuntimeWarning",
+]
 
 [tool.mypy]
 python_version = "3.10"
