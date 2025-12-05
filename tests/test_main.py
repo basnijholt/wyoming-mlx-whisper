@@ -7,6 +7,7 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
+from wyoming_mlx_whisper import __version__
 from wyoming_mlx_whisper.__main__ import (
     DEFAULT_MODEL,
     DEFAULT_URI,
@@ -49,8 +50,6 @@ class TestCLI:
 
     def test_version_option(self, runner: CliRunner) -> None:
         """Test that --version works."""
-        from wyoming_mlx_whisper import __version__
-
         result = runner.invoke(app, ["--version"])
         assert result.exit_code == 0
         assert __version__ in result.stdout
