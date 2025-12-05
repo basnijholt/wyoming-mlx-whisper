@@ -11,12 +11,12 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
 
 ### Available Models
 
-| Model | Size | Use Case |
-|-------|------|----------|
-| [`mlx-community/whisper-tiny`](https://huggingface.co/mlx-community/whisper-tiny) | 75 MB | Fastest, basic accuracy |
-| [`mlx-community/whisper-small-mlx`](https://huggingface.co/mlx-community/whisper-small-mlx) | 481 MB | Good balance |
-| [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) | 1.6 GB | **Default** - best quality |
-| [`mlx-community/whisper-large-v3-turbo-q4`](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) | 464 MB | Near-best quality, less memory |
+| Model | Size | Speed | Quality |
+|-------|------|-------|---------|
+| [`mlx-community/whisper-tiny`](https://huggingface.co/mlx-community/whisper-tiny) | 75 MB | ⚡⚡⚡ Fastest | Basic |
+| [`mlx-community/whisper-small-mlx`](https://huggingface.co/mlx-community/whisper-small-mlx) | 481 MB | ⚡⚡ Fast | Good |
+| [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) | 1.6 GB | ⚡ Medium | **Best** (default) |
+| [`mlx-community/whisper-large-v3-turbo-q4`](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) | 464 MB | ⚡ Medium | Near-best |
 
 Use `--model <name>` to select a different model.
 
@@ -32,8 +32,8 @@ Use `--model <name>` to select a different model.
 - [Usage](#usage)
   - [Run directly](#run-directly)
   - [Run as macOS service (launchd)](#run-as-macos-service-launchd)
-- [Home Assistant Integration](#home-assistant-integration)
 - [Options](#options)
+- [Home Assistant Integration](#home-assistant-integration)
 - [Related Projects](#related-projects)
 - [Development](#development)
 - [Acknowledgements](#acknowledgements)
@@ -97,15 +97,6 @@ View logs:
 tail -f ~/Library/Logs/wyoming-mlx-whisper/*.out ~/Library/Logs/wyoming-mlx-whisper/*.err
 ```
 
-## Home Assistant Integration
-
-1. Start the server (using any method above)
-2. In Home Assistant, go to **Settings → Devices & Services → Add Integration**
-3. Search for "Wyoming Protocol"
-4. Enter `localhost` (or your Mac's IP) and port `10300`
-
-The Whisper STT service will now be available for voice assistants.
-
 ## Options
 
 <details>
@@ -149,6 +140,15 @@ The Whisper STT service will now be available for voice assistants.
 <!-- OUTPUT:END -->
 
 </details>
+
+## Home Assistant Integration
+
+1. Start the server (using any method above)
+2. In Home Assistant, go to **Settings → Devices & Services → Add Integration**
+3. Search for "Wyoming Protocol"
+4. Enter `localhost` (or your Mac's IP) and port `10300`
+
+The Whisper STT service will now be available for voice assistants.
 
 ## Related Projects
 
