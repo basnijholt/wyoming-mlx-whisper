@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
 """Wyoming server for MLX Whisper."""
 
-import asyncio
-import contextlib
 import logging
 from typing import Annotated
 
 import typer
-from mlx_whisper.load_models import load_model
-from wyoming.info import AsrModel, AsrProgram, Attribution, Info
-from wyoming.server import AsyncServer
 
 from . import __version__
-from .const import WHISPER_LANGUAGES
-from .handler import WhisperEventHandler
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,6 +60,17 @@ def main(  # noqa: PLR0913
     ] = False,
 ) -> None:
     """Run the Wyoming MLX Whisper server."""
+    # Lazy imports to make --help fast
+    import asyncio
+    import contextlib
+
+    from mlx_whisper.load_models import load_model
+    from wyoming.info import AsrModel, AsrProgram, Attribution, Info
+    from wyoming.server import AsyncServer
+
+    from .const import WHISPER_LANGUAGES
+    from .handler import WhisperEventHandler
+
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO,
         format=log_format,
