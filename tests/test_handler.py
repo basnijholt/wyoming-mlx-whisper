@@ -4,7 +4,9 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import numpy as np
 import pytest
+from wyoming.asr import Transcribe
 from wyoming.audio import AudioChunk, AudioStop
+from wyoming.event import Event
 from wyoming.info import Describe, Info
 
 from wyoming_mlx_whisper.handler import WhisperEventHandler, _pcm_to_float
@@ -192,8 +194,6 @@ class TestWhisperEventHandler:
     @pytest.mark.asyncio
     async def test_handle_transcribe_event(self, handler: WhisperEventHandler) -> None:
         """Test handling of Transcribe event."""
-        from wyoming.asr import Transcribe
-
         event = Transcribe().event()
         result = await handler.handle_event(event)
 
@@ -202,8 +202,6 @@ class TestWhisperEventHandler:
     @pytest.mark.asyncio
     async def test_handle_unknown_event(self, handler: WhisperEventHandler) -> None:
         """Test handling of unknown event type."""
-        from wyoming.event import Event
-
         # Create an event with an unknown type
         event = Event(type="unknown-event-type")
         result = await handler.handle_event(event)

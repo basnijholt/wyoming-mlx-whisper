@@ -2,6 +2,8 @@
 
 from unittest.mock import patch
 
+from wyoming_mlx_whisper import __version__
+from wyoming_mlx_whisper.const import WHISPER_LANGUAGES
 from wyoming_mlx_whisper.server import _create_wyoming_info, run_server
 
 
@@ -21,16 +23,12 @@ class TestCreateWyomingInfo:
 
     def test_includes_whisper_languages(self) -> None:
         """Test that all Whisper languages are included."""
-        from wyoming_mlx_whisper.const import WHISPER_LANGUAGES
-
         info = _create_wyoming_info("test-model")
 
         assert info.asr[0].models[0].languages == WHISPER_LANGUAGES
 
     def test_includes_version(self) -> None:
         """Test that version is included in info."""
-        from wyoming_mlx_whisper import __version__
-
         info = _create_wyoming_info("test-model")
 
         assert info.asr[0].version == __version__
