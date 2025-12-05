@@ -5,6 +5,7 @@ import logging
 import time
 import wave
 from io import BytesIO
+from typing import Any
 
 import librosa
 import mlx_whisper
@@ -24,8 +25,8 @@ class WhisperAPIEventHandler(AsyncEventHandler):
         self,
         wyoming_info: Info,
         cli_args: argparse.Namespace,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         super().__init__(*args, **kwargs)
 
