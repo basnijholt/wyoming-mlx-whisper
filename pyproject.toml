@@ -8,7 +8,10 @@ version = "1.1.0"
 description = "Wyoming Server for MLX whisper"
 readme = "README.md"
 license = "MIT"
-authors = [{ name = "Vincent Lin" }]
+authors = [
+    { name = "Bas Nijholt", email = "bas@nijholt.com" },
+    { name = "Vincent Lin" },
+]
 keywords = ["rhasspy", "wyoming", "mlx", "whisper", "stt"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -40,8 +43,8 @@ dev = [
 wyoming-mlx-whisper = "wyoming_mlx_whisper.__main__:run"
 
 [project.urls]
-Homepage = "https://github.com/vincent861223/wyoming-mlx-whisper"
-Repository = "https://github.com/vincent861223/wyoming-mlx-whisper.git"
+Homepage = "https://github.com/basnijholt/wyoming-mlx-whisper"
+Repository = "https://github.com/basnijholt/wyoming-mlx-whisper.git"
 
 [tool.ruff]
 target-version = "py310"

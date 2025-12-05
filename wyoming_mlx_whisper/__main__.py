@@ -48,39 +48,34 @@ async def main() -> None:
     wyoming_info = Info(
         asr=[
             AsrProgram(
-                name="whisper-cpp",
-                description="Faster Whisper transcription via its API",
+                name="mlx-whisper",
+                description="MLX Whisper speech-to-text for Apple Silicon",
                 attribution=Attribution(
-                    name="Michael Hansen",
-                    url="https://github.com/synesthesiam",
+                    name="MLX Community",
+                    url="https://github.com/ml-explore/mlx-examples",
                 ),
                 installed=True,
                 version=__version__,
                 models=[
                     AsrModel(
-                        name="whisper.cpp",
-                        description="whisper.cpp",
+                        name=args.model,
+                        description=args.model,
                         attribution=Attribution(
-                            name="rhasspy wyoming faster whisper",
-                            url="https://github.com/rhasspy/wyoming-faster-whisper",
+                            name="OpenAI Whisper",
+                            url="https://github.com/openai/whisper",
                         ),
                         installed=True,
                         languages=WHISPER_LANGUAGES,
-                        version="1.0",
+                        version=__version__,
                     ),
                 ],
             ),
         ],
     )
 
-    # Load converted whisper API
-
     server = AsyncServer.from_uri(args.uri)
     _LOGGER.info("Ready")
     await server.run(partial(WhisperEventHandler, wyoming_info, args))
-
-
-# -----------------------------------------------------------------------------
 
 
 def run() -> None:
