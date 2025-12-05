@@ -71,7 +71,6 @@ async def main() -> None:
 
     server = AsyncServer.from_uri(args.uri)
     _LOGGER.info("Ready")
-    model_lock = asyncio.Lock()
     await server.run(partial(WhisperAPIEventHandler, wyoming_info, args))
 
 
@@ -83,7 +82,7 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    try:
+    import contextlib
+
+    with contextlib.suppress(KeyboardInterrupt):
         run()
-    except KeyboardInterrupt:
-        pass

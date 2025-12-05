@@ -1,4 +1,5 @@
 """Event handler for clients of the server."""
+
 import argparse
 import logging
 import time
@@ -31,7 +32,7 @@ class WhisperAPIEventHandler(AsyncEventHandler):
         self.cli_args = cli_args
         self._model = cli_args.model
         self.wyoming_info_event = wyoming_info.event()
-        self.audio = bytes()
+        self.audio = b""
         self.audio_converter = AudioChunkConverter(
             rate=16000,
             width=2,
@@ -51,19 +52,18 @@ class WhisperAPIEventHandler(AsyncEventHandler):
 
         if AudioStop.is_type(event.type):
             _LOGGER.debug("Audio stopped")
-            with BytesIO() as tmpfile:
-                with wave.open(tmpfile, "wb") as wavfile:
-                    wavfile.setparams((1, 2, 16000, 0, "NONE", "NONE"))
-                    wavfile.writeframes(self.audio)
-                    audio, sr = librosa.load(
-                        BytesIO(tmpfile.getvalue()), sr=16000, mono=True
-                    )
-                    start_time = time.time()
-                    text = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)[
-                        "text"
-                    ]
-                    end_time = time.time()
-            _LOGGER.debug(f"Speech recognition time: {end_time - start_time} seconds")
+            with BytesIO() as tmpfile, wave.open(tmpfile, "wb") as wavfile:
+                wavfile.setparams((1, 2, 16000, 0, "NONE", "NONE"))
+                wavfile.writeframes(self.audio)
+                audio, sr = librosa.load(
+                    BytesIO(tmpfile.getvalue()), sr=16000, mono=True
+                )
+                start_time = time.time()
+                text = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)[
+                    "text"
+                ]
+                end_time = time.time()
+            _LOGGER.debug("Speech recognition time: %s seconds", end_time - start_time)
 
             _LOGGER.info(text)
 
@@ -71,7 +71,7 @@ class WhisperAPIEventHandler(AsyncEventHandler):
             _LOGGER.debug("Completed request")
 
             # Reset
-            self.audio = bytes()
+            self.audio = b""
 
             return False
 
