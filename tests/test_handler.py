@@ -7,10 +7,7 @@ import pytest
 from wyoming.audio import AudioChunk, AudioStop
 from wyoming.info import Describe, Info
 
-from wyoming_mlx_whisper.handler import (
-    WhisperEventHandler,
-    _pcm_to_float,
-)
+from wyoming_mlx_whisper.handler import WhisperEventHandler, _pcm_to_float
 
 
 class TestPcmToFloat:
