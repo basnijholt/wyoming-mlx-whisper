@@ -2,7 +2,7 @@
 
 [Wyoming protocol](https://github.com/rhasspy/wyoming) server for [mlx-whisper](https://pypi.org/project/mlx-whisper) speech-to-text on Apple Silicon.
 
-Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) by default (~1.6GB download, ~6GB memory), which runs near real-time on M1 Pro and newer. For lower memory usage, try the [quantized version](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) with `--model mlx-community/whisper-large-v3-turbo-q4`.
+Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) by default (~1.6GB download), which runs near real-time on M1 Pro and newer. For lower memory usage, try the [quantized version](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) with `--model mlx-community/whisper-large-v3-turbo-q4`.
 
 <details><summary><b><u>[ToC]</u></b> 📚</summary>
 
