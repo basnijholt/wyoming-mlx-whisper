@@ -60,16 +60,7 @@ def main(  # noqa: PLR0913
     ] = False,
 ) -> None:
     """Run the Wyoming MLX Whisper server."""
-    # Lazy imports to make --help fast
-    import asyncio
-    import contextlib
-
-    from mlx_whisper.load_models import load_model
-    from wyoming.info import AsrModel, AsrProgram, Attribution, Info
-    from wyoming.server import AsyncServer
-
-    from .const import WHISPER_LANGUAGES
-    from .handler import WhisperEventHandler
+    from .server import run_server
 
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO,
@@ -83,59 +74,7 @@ def main(  # noqa: PLR0913
         debug,
     )
 
-    typer.echo(typer.style("🎤 Wyoming MLX Whisper", fg=typer.colors.GREEN, bold=True))
-    typer.echo(f"   URI:      {typer.style(uri, fg=typer.colors.CYAN)}")
-    typer.echo(f"   Model:    {typer.style(model, fg=typer.colors.CYAN)}")
-    typer.echo(f"   Language: {typer.style(language or 'auto', fg=typer.colors.CYAN)}")
-
-    # Pre-load model to avoid delay on first request
-    typer.echo(typer.style("📦 Loading model...", fg=typer.colors.YELLOW))
-    load_model(model)
-    typer.echo(typer.style("✅ Model loaded!", fg=typer.colors.GREEN))
-
-    wyoming_info = Info(
-        asr=[
-            AsrProgram(
-                name="mlx-whisper",
-                description="MLX Whisper speech-to-text for Apple Silicon",
-                attribution=Attribution(
-                    name="MLX Community",
-                    url="https://github.com/ml-explore/mlx-examples",
-                ),
-                installed=True,
-                version=__version__,
-                models=[
-                    AsrModel(
-                        name=model,
-                        description=model,
-                        attribution=Attribution(
-                            name="OpenAI Whisper",
-                            url="https://github.com/openai/whisper",
-                        ),
-                        installed=True,
-                        languages=WHISPER_LANGUAGES,
-                        version=__version__,
-                    ),
-                ],
-            ),
-        ],
-    )
-
-    async def _run() -> None:
-        server = AsyncServer.from_uri(uri)
-        _LOGGER.info("Ready")
-        await server.run(
-            lambda *args, **kwargs: WhisperEventHandler(
-                wyoming_info,
-                model,
-                language,
-                *args,
-                **kwargs,
-            ),
-        )
-
-    with contextlib.suppress(KeyboardInterrupt):
-        asyncio.run(_run(), debug=debug)
+    run_server(uri, model, language, debug=debug)
 
 
 def run() -> None:
