@@ -23,6 +23,7 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
   - [Run as macOS service (launchd)](#run-as-macos-service-launchd)
 - [Home Assistant Integration](#home-assistant-integration)
 - [Options](#options)
+- [Related Projects](#related-projects)
 - [Development](#development)
 - [Acknowledgements](#acknowledgements)
 
@@ -137,6 +138,13 @@ The Whisper STT service will now be available for voice assistants.
 <!-- OUTPUT:END -->
 
 </details>
+
+## Related Projects
+
+- **[agent-cli](https://github.com/basnijholt/agent-cli)** - Local-first AI-powered CLI agents for voice transcription, autocorrect, voice editing, and more. Can use `wyoming-mlx-whisper` as its ASR backend on Apple Silicon:
+  ```sh
+  agent-cli transcribe --asr-wyoming-port 10300
+  ```
 
 ## Development
 
