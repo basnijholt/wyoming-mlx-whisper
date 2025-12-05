@@ -1,3 +1,5 @@
+"""Constants for Wyoming MLX Whisper."""
+
 WHISPER_LANGUAGES = [
     "af",
     "am",

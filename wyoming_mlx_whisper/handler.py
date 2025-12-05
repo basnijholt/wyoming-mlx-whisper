@@ -25,9 +25,10 @@ class WhisperAPIEventHandler(AsyncEventHandler):
         self,
         wyoming_info: Info,
         cli_args: argparse.Namespace,
-        *args: Any,
-        **kwargs: Any,
+        *args: Any,  # noqa: ANN401
+        **kwargs: Any,  # noqa: ANN401
     ) -> None:
+        """Initialize the event handler."""
         super().__init__(*args, **kwargs)
 
         self.cli_args = cli_args
@@ -41,6 +42,7 @@ class WhisperAPIEventHandler(AsyncEventHandler):
         )
 
     async def handle_event(self, event: Event) -> bool:
+        """Handle an event from the client."""
         if AudioChunk.is_type(event.type):
             if not self.audio:
                 _LOGGER.debug("Receiving audio")
@@ -56,8 +58,10 @@ class WhisperAPIEventHandler(AsyncEventHandler):
             with BytesIO() as tmpfile, wave.open(tmpfile, "wb") as wavfile:
                 wavfile.setparams((1, 2, 16000, 0, "NONE", "NONE"))
                 wavfile.writeframes(self.audio)
-                audio, sr = librosa.load(
-                    BytesIO(tmpfile.getvalue()), sr=16000, mono=True
+                audio, _sr = librosa.load(
+                    BytesIO(tmpfile.getvalue()),
+                    sr=16000,
+                    mono=True,
                 )
                 start_time = time.time()
                 text = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)[

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Wyoming server for MLX Whisper."""
+
 import argparse
 import asyncio
 import logging
@@ -15,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def main() -> None:
-    """Main entry point."""
+    """Run the main entry point."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
@@ -25,7 +27,9 @@ async def main() -> None:
     parser.add_argument("--uri", required=True, help="unix:// or tcp://")
     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
     parser.add_argument(
-        "--log-format", default=logging.BASIC_FORMAT, help="Format for log messages"
+        "--log-format",
+        default=logging.BASIC_FORMAT,
+        help="Format for log messages",
     )
     parser.add_argument(
         "--version",
@@ -36,7 +40,8 @@ async def main() -> None:
     args = parser.parse_args()
 
     logging.basicConfig(
-        level=logging.DEBUG if args.debug else logging.INFO, format=args.log_format
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format=args.log_format,
     )
     _LOGGER.debug(args)
 
@@ -46,7 +51,8 @@ async def main() -> None:
                 name="whisper-cpp",
                 description="Faster Whisper transcription via its API",
                 attribution=Attribution(
-                    name="Michael Hansen", url="https://github.com/synesthesiam"
+                    name="Michael Hansen",
+                    url="https://github.com/synesthesiam",
                 ),
                 installed=True,
                 version=__version__,
@@ -61,9 +67,9 @@ async def main() -> None:
                         installed=True,
                         languages=WHISPER_LANGUAGES,
                         version="1.0",
-                    )
+                    ),
                 ],
-            )
+            ),
         ],
     )
 
@@ -78,6 +84,7 @@ async def main() -> None:
 
 
 def run() -> None:
+    """Run the Wyoming MLX Whisper server."""
     asyncio.run(main(), debug=True)
 
 
