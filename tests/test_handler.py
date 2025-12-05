@@ -1,6 +1,5 @@
 """Tests for the event handler."""
 
-from argparse import Namespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import numpy as np
@@ -63,20 +62,20 @@ class TestWhisperEventHandler:
         return MagicMock(spec=Info)
 
     @pytest.fixture
-    def mock_cli_args(self) -> Namespace:
-        """Create mock CLI arguments."""
-        return Namespace(model="mlx-community/whisper-large-v3-turbo")
+    def mock_model(self) -> str:
+        """Create mock model name."""
+        return "mlx-community/whisper-large-v3-turbo"
 
     @pytest.fixture
     def handler(
         self,
         mock_wyoming_info: Info,
-        mock_cli_args: Namespace,
+        mock_model: str,
     ) -> WhisperEventHandler:
         """Create a handler instance for testing."""
         handler = WhisperEventHandler(
             mock_wyoming_info,
-            mock_cli_args,
+            mock_model,
             reader=MagicMock(),
             writer=MagicMock(),
         )
@@ -86,12 +85,12 @@ class TestWhisperEventHandler:
     def test_init(
         self,
         mock_wyoming_info: Info,
-        mock_cli_args: Namespace,
+        mock_model: str,
     ) -> None:
         """Test handler initialization."""
         handler = WhisperEventHandler(
             mock_wyoming_info,
-            mock_cli_args,
+            mock_model,
             reader=MagicMock(),
             writer=MagicMock(),
         )

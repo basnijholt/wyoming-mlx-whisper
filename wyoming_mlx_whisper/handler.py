@@ -1,6 +1,5 @@
 """Event handler for clients of the server."""
 
-import argparse
 import logging
 import time
 from typing import Any
@@ -32,13 +31,13 @@ class WhisperEventHandler(AsyncEventHandler):
     def __init__(
         self,
         wyoming_info: Info,
-        cli_args: argparse.Namespace,
+        model: str,
         *args: Any,  # noqa: ANN401
         **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """Initialize the event handler."""
         super().__init__(*args, **kwargs)
-        self._model = cli_args.model
+        self._model = model
         self._wyoming_info_event = wyoming_info.event()
         self._audio = b""
         self._audio_converter = AudioChunkConverter(
