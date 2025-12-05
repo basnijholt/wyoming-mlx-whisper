@@ -7,7 +7,18 @@
 
 [Wyoming protocol](https://github.com/rhasspy/wyoming) server for [mlx-whisper](https://pypi.org/project/mlx-whisper) speech-to-text on Apple Silicon.
 
-Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) by default (~1.6GB download, ~1.7GB memory), which runs near real-time on M1 Pro and newer. For lower memory usage, try the [quantized version](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) with `--model mlx-community/whisper-large-v3-turbo-q4`.
+Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) by default, which runs near real-time on M1 Pro and newer.
+
+### Available Models
+
+| Model | Size | Use Case |
+|-------|------|----------|
+| [`mlx-community/whisper-tiny`](https://huggingface.co/mlx-community/whisper-tiny) | 75 MB | Fastest, basic accuracy |
+| [`mlx-community/whisper-small-mlx`](https://huggingface.co/mlx-community/whisper-small-mlx) | 481 MB | Good balance |
+| [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) | 1.6 GB | **Default** - best quality |
+| [`mlx-community/whisper-large-v3-turbo-q4`](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) | 464 MB | Near-best quality, less memory |
+
+Use `--model <name>` to select a different model.
 
 <details><summary><b><u>[ToC]</u></b> 📚</summary>
 
