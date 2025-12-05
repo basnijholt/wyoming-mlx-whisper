@@ -1,5 +1,10 @@
 # Wyoming MLX Whisper
 
+[![PyPI](https://img.shields.io/pypi/v/wyoming-mlx-whisper)](https://pypi.org/project/wyoming-mlx-whisper/)
+[![Python](https://img.shields.io/pypi/pyversions/wyoming-mlx-whisper)](https://pypi.org/project/wyoming-mlx-whisper/)
+[![License](https://img.shields.io/github/license/basnijholt/wyoming-mlx-whisper)](https://github.com/basnijholt/wyoming-mlx-whisper/blob/main/LICENSE)
+[![Pre-commit](https://github.com/basnijholt/wyoming-mlx-whisper/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/basnijholt/wyoming-mlx-whisper/actions/workflows/pre-commit.yml)
+
 [Wyoming protocol](https://github.com/rhasspy/wyoming) server for [mlx-whisper](https://pypi.org/project/mlx-whisper) speech-to-text on Apple Silicon.
 
 Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-community/whisper-large-v3-turbo) by default (~1.6GB download, ~1.7GB memory), which runs near real-time on M1 Pro and newer. For lower memory usage, try the [quantized version](https://huggingface.co/mlx-community/whisper-large-v3-turbo-q4) with `--model mlx-community/whisper-large-v3-turbo-q4`.
