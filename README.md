@@ -16,6 +16,7 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
 - [Usage](#usage)
   - [Run directly](#run-directly)
   - [Run as macOS service (launchd)](#run-as-macos-service-launchd)
+- [Home Assistant Integration](#home-assistant-integration)
 - [Options](#options)
 - [Development](#development)
 - [Acknowledgements](#acknowledgements)
@@ -26,8 +27,8 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
 
 ## Requirements
 
-- macOS with Apple Silicon (M1/M2/M3)
-- Python 3.10-3.13
+- macOS with Apple Silicon (M1/M2/M3/M4)
+- Python 3.10-3.13 (3.14 not yet supported by numba)
 - [uv](https://docs.astral.sh/uv/) (recommended) or pip
 
 ## Installation
@@ -37,8 +38,6 @@ Uses [`mlx-community/whisper-large-v3-turbo`](https://huggingface.co/mlx-communi
 ```sh
 uvx --python 3.12 wyoming-mlx-whisper
 ```
-
-> **Note:** Python 3.12 is required because numba (a dependency) doesn't support Python 3.14 yet.
 
 ### Using pip
 
@@ -80,6 +79,15 @@ View logs:
 ```sh
 tail -f ~/Library/Logs/wyoming-mlx-whisper/*.out ~/Library/Logs/wyoming-mlx-whisper/*.err
 ```
+
+## Home Assistant Integration
+
+1. Start the server (using any method above)
+2. In Home Assistant, go to **Settings → Devices & Services → Add Integration**
+3. Search for "Wyoming Protocol"
+4. Enter `localhost` (or your Mac's IP) and port `10300`
+
+The Whisper STT service will now be available for voice assistants.
 
 ## Options
 
