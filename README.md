@@ -79,4 +79,5 @@ uv run pre-commit install
 
 ## Acknowledgements
 
-Based on [wyoming-whisper-api-client](https://github.com/ser/wyoming-whisper-api-client) by ᎠᎡ. Ѕϵrgϵ Ѵictor.
+- Forked from [vincent861223/wyoming-mlx-whisper](https://github.com/vincent861223/wyoming-mlx-whisper) by Vincent Lin
+- Based on [wyoming-whisper-api-client](https://github.com/ser/wyoming-whisper-api-client) by ᎠᎡ. Ѕϵrgϵ Ѵictor
