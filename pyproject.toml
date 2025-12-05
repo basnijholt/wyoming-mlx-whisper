@@ -22,9 +22,9 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "wyoming",
-    "httpx",
     "mlx-whisper",
+    "numpy",
+    "wyoming",
 ]
 
 [project.optional-dependencies]
