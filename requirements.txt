@@ -1,4 +1,0 @@
-wyoming
-httpx
-librosa
-mlx-whisper
