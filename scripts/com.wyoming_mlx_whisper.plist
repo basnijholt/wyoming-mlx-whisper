@@ -6,17 +6,22 @@
   <string>com.wyoming_mlx_whisper</string>
   <key>ProgramArguments</key>
   <array>
-    <string><PROJECT-DIR>/scripts/wyoming-mlx-whisper.sh</string>
+    <string><UV-PATH></string>
+    <string>tool</string>
+    <string>run</string>
+    <string>--python</string>
+    <string>3.12</string>
+    <string>wyoming-mlx-whisper</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
   <key>KeepAlive</key>
   <true/>
   <key>WorkingDirectory</key>
-  <string><PROJECT-DIR></string>
+  <string><HOME-DIR></string>
   <key>StandardOutPath</key>
-  <string><PROJECT-DIR>/log/run.out</string>
+  <string><LOG-DIR>/wyoming-mlx-whisper.out</string>
   <key>StandardErrorPath</key>
-  <string><PROJECT-DIR>/log/run.err</string>
+  <string><LOG-DIR>/wyoming-mlx-whisper.err</string>
 </dict>
 </plist>

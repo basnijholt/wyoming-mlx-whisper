@@ -11,7 +11,7 @@ Uses `mlx-community/whisper-large-v3-turbo` by default, which runs near real-tim
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-  - [Using uv (recommended)](#using-uv-recommended)
+  - [Using uvx (recommended, no install needed)](#using-uvx-recommended-no-install-needed)
   - [Using pip](#using-pip)
 - [Usage](#usage)
   - [Run directly](#run-directly)
@@ -32,20 +32,19 @@ Uses `mlx-community/whisper-large-v3-turbo` by default, which runs near real-tim
 
 ## Installation
 
-### Using uv (recommended)
+### Using uvx (recommended, no install needed)
 
 ```sh
-git clone https://github.com/basnijholt/wyoming-mlx-whisper.git
-cd wyoming-mlx-whisper
-uv sync
+uvx --python 3.12 wyoming-mlx-whisper
 ```
+
+> **Note:** Python 3.12 is required because numba (a dependency) doesn't support Python 3.14 yet.
 
 ### Using pip
 
 ```sh
-git clone https://github.com/basnijholt/wyoming-mlx-whisper.git
-cd wyoming-mlx-whisper
-pip install .
+pip install wyoming-mlx-whisper
+wyoming-mlx-whisper
 ```
 
 ## Usage
@@ -53,33 +52,33 @@ pip install .
 ### Run directly
 
 ```sh
-# With uv
-uv run wyoming-mlx-whisper --uri tcp://0.0.0.0:7891
+# With uvx (no install needed)
+uvx --python 3.12 wyoming-mlx-whisper
 
 # Or if installed with pip
-wyoming-mlx-whisper --uri tcp://0.0.0.0:7891
+wyoming-mlx-whisper
 ```
 
 ### Run as macOS service (launchd)
 
-Install the service (starts automatically on login):
+Download and run the install script:
 
 ```sh
-./scripts/install_service.sh
+curl -fsSL https://raw.githubusercontent.com/basnijholt/wyoming-mlx-whisper/main/scripts/install_service.sh | bash
 ```
 
-The server runs at `tcp://localhost:7891` by default.
+The server runs at `tcp://localhost:10300` by default.
 
 Uninstall the service:
 
 ```sh
-./scripts/uninstall_service.sh
+curl -fsSL https://raw.githubusercontent.com/basnijholt/wyoming-mlx-whisper/main/scripts/uninstall_service.sh | bash
 ```
 
 View logs:
 
 ```sh
-tail -f log/run.out log/run.err
+tail -f ~/Library/Logs/wyoming-mlx-whisper/*.out ~/Library/Logs/wyoming-mlx-whisper/*.err
 ```
 
 ## Options
