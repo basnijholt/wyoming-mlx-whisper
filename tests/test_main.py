@@ -1,5 +1,6 @@
 """Tests for the __main__ module."""
 
+import re
 from unittest.mock import patch
 
 import pytest
@@ -38,11 +39,13 @@ class TestCLI:
 
     def test_help_option(self, runner: CliRunner) -> None:
         """Test that --help works."""
-        result = runner.invoke(app, ["--help"], color=False)
+        result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
-        assert "Wyoming MLX Whisper" in result.stdout
-        assert "--uri" in result.stdout
-        assert "--model" in result.stdout
+        # Strip ANSI escape codes for reliable string matching
+        output = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+        assert "Wyoming MLX Whisper" in output
+        assert "--uri" in output
+        assert "--model" in output
 
     def test_version_option(self, runner: CliRunner) -> None:
         """Test that --version works."""
