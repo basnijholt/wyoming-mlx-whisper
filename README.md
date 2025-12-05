@@ -1,49 +1,82 @@
-# Wyoming MLX Whisper Server
+# Wyoming MLX Whisper
 
-[Wyoming protocol](https://github.com/rhasspy/wyoming) server
-for the [mlx-whisper](https://pypi.org/project/mlx-whisper) speech to text system.
+[Wyoming protocol](https://github.com/rhasspy/wyoming) server for [mlx-whisper](https://pypi.org/project/mlx-whisper) speech-to-text on Apple Silicon.
 
-This runs `mlx-community/whisper-large-v3-turbo` by default, which gives a pretty good result and runs nearly real-time on a M1 Pro MacBook Pro.
+Uses `mlx-community/whisper-large-v3-turbo` by default, which runs near real-time on M1 Pro and newer.
 
+## Requirements
 
-## Install dependencies
+- macOS with Apple Silicon (M1/M2/M3)
+- Python 3.10-3.13
+- [uv](https://docs.astral.sh/uv/) (recommended) or pip
+
+## Installation
+
+### Using uv (recommended)
+
 ```sh
-brew install ffmpeg
-```
-
-## Running Wyoming MLX Whisper as service
-### Install the service
-The Wyoming MLX Whisper server will start at tcp://localhost:7891 by default.
-```sh
-cd ~
-git clone https://github.com/vincent861223/wyoming-mlx-whisper.git
+git clone https://github.com/basnijholt/wyoming-mlx-whisper.git
 cd wyoming-mlx-whisper
-./install_service.sh
-```
-The first speech recognition might take longer to process because it needs to download the model and load the weight. 
-
-### Uninstall the service
-```sh
-./uninstall_service.sh
+uv sync
 ```
 
-## Running as script 
-
-Clone the repository and set up Python virtual environment:
+### Using pip
 
 ```sh
-git clone https://github.com/vincent861223/wyoming-mlx-whisper.git
+git clone https://github.com/basnijholt/wyoming-mlx-whisper.git
 cd wyoming-mlx-whisper
-script/setup
+pip install .
 ```
 
-Run a server anyone can connect to:
+## Usage
+
+### Run directly
 
 ```sh
-./script/run --uri tcp://0.0.0.0:7891 --debug 
+# With uv
+uv run wyoming-mlx-whisper --uri tcp://0.0.0.0:7891
+
+# Or if installed with pip
+wyoming-mlx-whisper --uri tcp://0.0.0.0:7891
 ```
 
-# Acknowledgements
+### Run as macOS service (launchd)
 
-1. It's a rewrite of ᎠᎡ. Ѕϵrgϵ Ѵictor's wyoming-whisper-api-client.
-2. Tests are not functioning as there is no public Whisper API service to test it out.
+Install the service (starts automatically on login):
+
+```sh
+./scripts/install_service.sh
+```
+
+The server runs at `tcp://localhost:7891` by default.
+
+Uninstall the service:
+
+```sh
+./scripts/uninstall_service.sh
+```
+
+View logs:
+
+```sh
+tail -f log/run.out log/run.err
+```
+
+## Options
+
+```
+--uri URI          Wyoming server URI (required), e.g., tcp://0.0.0.0:7891
+--model MODEL      MLX Whisper model (default: mlx-community/whisper-large-v3-turbo)
+--debug            Enable debug logging
+```
+
+## Development
+
+```sh
+uv sync
+uv run pre-commit install
+```
+
+## Acknowledgements
+
+Based on [wyoming-whisper-api-client](https://github.com/ser/wyoming-whisper-api-client) by ᎠᎡ. Ѕϵrgϵ Ѵictor.

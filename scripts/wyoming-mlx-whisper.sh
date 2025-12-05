@@ -1,3 +1,4 @@
 #!/bin/bash
-./script/setup
-./script/run --uri tcp://0.0.0.0:7891
+set -e
+cd "$(dirname "$0")/.."
+uv run wyoming-mlx-whisper --uri tcp://0.0.0.0:7891 "$@"
