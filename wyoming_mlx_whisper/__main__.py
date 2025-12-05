@@ -7,6 +7,7 @@ import logging
 from typing import Annotated
 
 import typer
+from mlx_whisper.load_models import load_model
 from wyoming.info import AsrModel, AsrProgram, Attribution, Info
 from wyoming.server import AsyncServer
 
@@ -82,6 +83,11 @@ def main(  # noqa: PLR0913
     typer.echo(f"   URI:      {typer.style(uri, fg=typer.colors.CYAN)}")
     typer.echo(f"   Model:    {typer.style(model, fg=typer.colors.CYAN)}")
     typer.echo(f"   Language: {typer.style(language or 'auto', fg=typer.colors.CYAN)}")
+
+    # Pre-load model to avoid delay on first request
+    typer.echo(typer.style("📦 Loading model...", fg=typer.colors.YELLOW))
+    load_model(model)
+    typer.echo(typer.style("✅ Model loaded!", fg=typer.colors.GREEN))
 
     wyoming_info = Info(
         asr=[
