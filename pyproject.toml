@@ -24,7 +24,6 @@ requires-python = ">=3.10"
 dependencies = [
     "wyoming",
     "httpx",
-    "librosa",
     "mlx-whisper",
 ]
 

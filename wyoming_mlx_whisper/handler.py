@@ -3,12 +3,10 @@
 import argparse
 import logging
 import time
-import wave
-from io import BytesIO
 from typing import Any
 
-import librosa
 import mlx_whisper
+import numpy as np
 from wyoming.asr import Transcribe, Transcript
 from wyoming.audio import AudioChunk, AudioChunkConverter, AudioStop
 from wyoming.event import Event
@@ -55,19 +53,13 @@ class WhisperAPIEventHandler(AsyncEventHandler):
 
         if AudioStop.is_type(event.type):
             _LOGGER.debug("Audio stopped")
-            with BytesIO() as tmpfile, wave.open(tmpfile, "wb") as wavfile:
-                wavfile.setparams((1, 2, 16000, 0, "NONE", "NONE"))
-                wavfile.writeframes(self.audio)
-                audio, _sr = librosa.load(
-                    BytesIO(tmpfile.getvalue()),
-                    sr=16000,
-                    mono=True,
-                )
-                start_time = time.time()
-                text = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)[
-                    "text"
-                ]
-                end_time = time.time()
+            # Convert 16-bit PCM to float32 normalized to [-1, 1]
+            audio = (
+                np.frombuffer(self.audio, dtype=np.int16).astype(np.float32) / 32768.0
+            )
+            start_time = time.time()
+            text = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)["text"]
+            end_time = time.time()
             _LOGGER.debug("Speech recognition time: %s seconds", end_time - start_time)
 
             _LOGGER.info(text)
