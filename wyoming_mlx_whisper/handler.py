@@ -32,12 +32,14 @@ class WhisperEventHandler(AsyncEventHandler):
         self,
         wyoming_info: Info,
         model: str,
+        language: str | None,
         *args: Any,  # noqa: ANN401
         **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """Initialize the event handler."""
         super().__init__(*args, **kwargs)
         self._model = model
+        self._language = language
         self._wyoming_info_event = wyoming_info.event()
         self._audio = b""
         self._audio_converter = AudioChunkConverter(
@@ -53,7 +55,10 @@ class WhisperEventHandler(AsyncEventHandler):
     def _transcribe(self, audio: NDArray[np.float32]) -> str:
         """Transcribe audio using MLX Whisper."""
         start_time = time.time()
-        result = mlx_whisper.transcribe(audio, path_or_hf_repo=self._model)
+        kwargs: dict[str, str] = {"path_or_hf_repo": self._model}
+        if self._language:
+            kwargs["language"] = self._language
+        result = mlx_whisper.transcribe(audio, **kwargs)
         elapsed = time.time() - start_time
         _LOGGER.debug("Transcription completed in %.2f seconds", elapsed)
         return str(result["text"])

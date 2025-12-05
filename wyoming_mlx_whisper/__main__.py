@@ -16,7 +16,10 @@ from .handler import WhisperEventHandler
 
 _LOGGER = logging.getLogger(__name__)
 
-app = typer.Typer(add_completion=False)
+app = typer.Typer(
+    add_completion=False,
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 
 
 def version_callback(value: bool) -> None:  # noqa: FBT001
@@ -26,14 +29,28 @@ def version_callback(value: bool) -> None:  # noqa: FBT001
         raise typer.Exit
 
 
+DEFAULT_URI = "tcp://0.0.0.0:10300"
+DEFAULT_MODEL = "mlx-community/whisper-large-v3-turbo"
+
+
 @app.command()
-def main(
-    uri: Annotated[str, typer.Option(help="unix:// or tcp://")],
+def main(  # noqa: PLR0913
+    uri: Annotated[
+        str,
+        typer.Option(envvar="WHISPER_URI", help="unix:// or tcp://"),
+    ] = DEFAULT_URI,
     model: Annotated[
         str,
-        typer.Option(help="Name of MLX Whisper model to use"),
-    ] = "mlx-community/whisper-large-v3-turbo",
-    debug: Annotated[bool, typer.Option(help="Log DEBUG messages")] = False,  # noqa: FBT002
+        typer.Option(envvar="WHISPER_MODEL", help="Name of MLX Whisper model to use"),
+    ] = DEFAULT_MODEL,
+    language: Annotated[
+        str | None,
+        typer.Option(envvar="WHISPER_LANGUAGE", help="Language code (e.g., 'en')"),
+    ] = None,
+    debug: Annotated[  # noqa: FBT002
+        bool,
+        typer.Option(envvar="WHISPER_DEBUG", help="Log DEBUG messages"),
+    ] = False,
     log_format: Annotated[
         str,
         typer.Option(help="Format for log messages"),
@@ -53,7 +70,18 @@ def main(
         level=logging.DEBUG if debug else logging.INFO,
         format=log_format,
     )
-    _LOGGER.debug("model=%s, uri=%s, debug=%s", model, uri, debug)
+    _LOGGER.debug(
+        "model=%s, uri=%s, language=%s, debug=%s",
+        model,
+        uri,
+        language,
+        debug,
+    )
+
+    typer.echo(typer.style("🎤 Wyoming MLX Whisper", fg=typer.colors.GREEN, bold=True))
+    typer.echo(f"   URI:      {typer.style(uri, fg=typer.colors.CYAN)}")
+    typer.echo(f"   Model:    {typer.style(model, fg=typer.colors.CYAN)}")
+    typer.echo(f"   Language: {typer.style(language or 'auto', fg=typer.colors.CYAN)}")
 
     wyoming_info = Info(
         asr=[
@@ -90,6 +118,7 @@ def main(
             lambda *args, **kwargs: WhisperEventHandler(
                 wyoming_info,
                 model,
+                language,
                 *args,
                 **kwargs,
             ),

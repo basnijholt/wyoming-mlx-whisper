@@ -76,6 +76,7 @@ class TestWhisperEventHandler:
         handler = WhisperEventHandler(
             mock_wyoming_info,
             mock_model,
+            language=None,
             reader=MagicMock(),
             writer=MagicMock(),
         )
@@ -91,10 +92,12 @@ class TestWhisperEventHandler:
         handler = WhisperEventHandler(
             mock_wyoming_info,
             mock_model,
+            language="en",
             reader=MagicMock(),
             writer=MagicMock(),
         )
         assert handler._model == "mlx-community/whisper-large-v3-turbo"
+        assert handler._language == "en"
         assert handler._audio == b""
 
     def test_reset(self, handler: WhisperEventHandler) -> None:
