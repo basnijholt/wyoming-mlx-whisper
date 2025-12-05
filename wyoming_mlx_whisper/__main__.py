@@ -11,7 +11,7 @@ from wyoming.server import AsyncServer
 
 from . import __version__
 from .const import WHISPER_LANGUAGES
-from .handler import WhisperAPIEventHandler
+from .handler import WhisperEventHandler
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -77,7 +77,7 @@ async def main() -> None:
 
     server = AsyncServer.from_uri(args.uri)
     _LOGGER.info("Ready")
-    await server.run(partial(WhisperAPIEventHandler, wyoming_info, args))
+    await server.run(partial(WhisperEventHandler, wyoming_info, args))
 
 
 # -----------------------------------------------------------------------------
