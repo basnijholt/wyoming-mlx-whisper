@@ -1,7 +1,9 @@
 """Wyoming server for MLX Whisper."""
 
-from importlib.metadata import version
+try:
+    from ._version import __version__, __version_tuple__
+except ImportError:
+    __version__ = "0.0.0"
+    __version_tuple__ = (0, 0, 0)
 
-__version__ = version("wyoming-mlx-whisper")
-
-__all__ = ["__version__"]
+__all__ = ["__version__", "__version_tuple__"]

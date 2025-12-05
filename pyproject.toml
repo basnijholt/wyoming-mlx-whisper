@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "wyoming-mlx-whisper"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Wyoming Server for MLX whisper"
 readme = "README.md"
 license = "MIT"
@@ -82,3 +82,9 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 ignore_missing_imports = true
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "wyoming_mlx_whisper/_version.py"
