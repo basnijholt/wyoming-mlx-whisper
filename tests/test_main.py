@@ -38,7 +38,7 @@ class TestCLI:
 
     def test_help_option(self, runner: CliRunner) -> None:
         """Test that --help works."""
-        result = runner.invoke(app, ["--help"])
+        result = runner.invoke(app, ["--help"], color=False)
         assert result.exit_code == 0
         assert "Wyoming MLX Whisper" in result.stdout
         assert "--uri" in result.stdout
