@@ -27,8 +27,11 @@ curl -fsSL "$PLIST_URL" | \
         -e "s|<LOG-DIR>|$LOG_DIR|g" \
     > "$PLIST_DST"
 
+# Unload if already loaded (ignore errors if not loaded)
+launchctl bootout gui/$UID "$PLIST_DST" 2>/dev/null || true
+
 # Load the service
-launchctl load "$PLIST_DST"
+launchctl bootstrap gui/$UID "$PLIST_DST"
 
 echo "Service installed and started."
 echo "Logs: $LOG_DIR/"
