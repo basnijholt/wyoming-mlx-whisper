@@ -28,7 +28,7 @@ DEFAULT_MODEL = "mlx-community/whisper-large-v3-turbo"
 
 
 @app.command()
-def main(  # noqa: PLR0913
+def main(
     uri: Annotated[
         str,
         typer.Option(envvar="WHISPER_URI", help="unix:// or tcp://"),
@@ -45,10 +45,6 @@ def main(  # noqa: PLR0913
         bool,
         typer.Option(envvar="WHISPER_DEBUG", help="Log DEBUG messages"),
     ] = False,
-    log_format: Annotated[
-        str,
-        typer.Option(help="Format for log messages"),
-    ] = logging.BASIC_FORMAT,
     version: Annotated[  # noqa: ARG001, FBT002
         bool,
         typer.Option(
@@ -60,11 +56,14 @@ def main(  # noqa: PLR0913
     ] = False,
 ) -> None:
     """Run the Wyoming MLX Whisper server."""
+    from rich.logging import RichHandler
+
     from .server import run_server
 
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO,
-        format=log_format,
+        format="%(message)s",
+        handlers=[RichHandler(rich_tracebacks=True, show_path=debug)],
     )
     _LOGGER.debug(
         "model=%s, uri=%s, language=%s, debug=%s",

@@ -57,10 +57,10 @@ class TestCreateWyomingInfo:
 class TestRunServer:
     """Tests for run_server function."""
 
-    def test_prints_startup_banner(self) -> None:
-        """Test that run_server prints startup information."""
+    def test_logs_startup_banner(self) -> None:
+        """Test that run_server logs startup information."""
         with (
-            patch("wyoming_mlx_whisper.server.typer.echo") as mock_echo,
+            patch("wyoming_mlx_whisper.server._LOGGER") as mock_logger,
             patch("wyoming_mlx_whisper.server.load_model"),
             patch("wyoming_mlx_whisper.server.asyncio.run"),
         ):
@@ -71,16 +71,16 @@ class TestRunServer:
                 debug=False,
             )
 
-            # Check that startup messages were printed
-            calls = [str(call) for call in mock_echo.call_args_list]
-            assert any("Wyoming MLX Whisper" in str(c) for c in calls)
-            assert any("Loading model" in str(c) for c in calls)
-            assert any("Model loaded" in str(c) for c in calls)
+            # Check that startup messages were logged
+            calls = " ".join(str(call) for call in mock_logger.info.call_args_list)
+            assert "Wyoming MLX Whisper" in calls
+            assert "Loading model" in calls
+            assert "Model loaded" in calls
 
     def test_loads_model(self) -> None:
         """Test that run_server loads the specified model."""
         with (
-            patch("wyoming_mlx_whisper.server.typer.echo"),
+            patch("wyoming_mlx_whisper.server._LOGGER"),
             patch("wyoming_mlx_whisper.server.load_model") as mock_load,
             patch("wyoming_mlx_whisper.server.asyncio.run"),
         ):
@@ -96,7 +96,7 @@ class TestRunServer:
     def test_runs_async_server(self) -> None:
         """Test that run_server starts the async server."""
         with (
-            patch("wyoming_mlx_whisper.server.typer.echo"),
+            patch("wyoming_mlx_whisper.server._LOGGER"),
             patch("wyoming_mlx_whisper.server.load_model"),
             patch("wyoming_mlx_whisper.server.asyncio.run") as mock_run,
         ):
@@ -114,7 +114,7 @@ class TestRunServer:
     def test_handles_keyboard_interrupt(self) -> None:
         """Test that KeyboardInterrupt is handled gracefully."""
         with (
-            patch("wyoming_mlx_whisper.server.typer.echo"),
+            patch("wyoming_mlx_whisper.server._LOGGER"),
             patch("wyoming_mlx_whisper.server.load_model"),
             patch(
                 "wyoming_mlx_whisper.server.asyncio.run",
@@ -129,10 +129,10 @@ class TestRunServer:
                 debug=False,
             )
 
-    def test_displays_language_auto_when_none(self) -> None:
-        """Test that 'auto' is displayed when language is None."""
+    def test_logs_language_auto_when_none(self) -> None:
+        """Test that 'auto' is logged when language is None."""
         with (
-            patch("wyoming_mlx_whisper.server.typer.echo") as mock_echo,
+            patch("wyoming_mlx_whisper.server._LOGGER") as mock_logger,
             patch("wyoming_mlx_whisper.server.load_model"),
             patch("wyoming_mlx_whisper.server.asyncio.run"),
         ):
@@ -144,5 +144,5 @@ class TestRunServer:
             )
 
             # Check that 'auto' was used for language
-            calls = " ".join(str(call) for call in mock_echo.call_args_list)
+            calls = " ".join(str(call) for call in mock_logger.info.call_args_list)
             assert "auto" in calls
