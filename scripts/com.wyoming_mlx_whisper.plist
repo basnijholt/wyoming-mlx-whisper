@@ -20,8 +20,8 @@
   <key>WorkingDirectory</key>
   <string><HOME-DIR></string>
   <key>StandardOutPath</key>
-  <string><LOG-DIR>/wyoming-mlx-whisper.out</string>
+  <string><LOG-DIR>/stdout.log</string>
   <key>StandardErrorPath</key>
-  <string><LOG-DIR>/wyoming-mlx-whisper.err</string>
+  <string><LOG-DIR>/stderr.log</string>
 </dict>
 </plist>

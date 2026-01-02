@@ -94,7 +94,7 @@ curl -fsSL https://raw.githubusercontent.com/basnijholt/wyoming-mlx-whisper/main
 View logs:
 
 ```sh
-tail -f ~/Library/Logs/wyoming-mlx-whisper/*.out ~/Library/Logs/wyoming-mlx-whisper/*.err
+tail -f ~/Library/Logs/wyoming-mlx-whisper/*.log
 ```
 
 ## Options
