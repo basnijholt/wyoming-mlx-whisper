@@ -4,7 +4,6 @@ import asyncio
 import contextlib
 import logging
 
-import typer
 from mlx_whisper.load_models import load_model
 from wyoming.info import AsrModel, AsrProgram, Attribution, Info
 from wyoming.server import AsyncServer
@@ -55,14 +54,14 @@ def run_server(
     debug: bool,
 ) -> None:
     """Run the Wyoming MLX Whisper server."""
-    typer.echo(typer.style("🎤 Wyoming MLX Whisper", fg=typer.colors.GREEN, bold=True))
-    typer.echo(f"   URI:      {typer.style(uri, fg=typer.colors.CYAN)}")
-    typer.echo(f"   Model:    {typer.style(model, fg=typer.colors.CYAN)}")
-    typer.echo(f"   Language: {typer.style(language or 'auto', fg=typer.colors.CYAN)}")
+    _LOGGER.info("🎤 Wyoming MLX Whisper")
+    _LOGGER.info("   URI:      %s", uri)
+    _LOGGER.info("   Model:    %s", model)
+    _LOGGER.info("   Language: %s", language or "auto")
 
-    typer.echo(typer.style("📦 Loading model...", fg=typer.colors.YELLOW))
+    _LOGGER.info("📦 Loading model...")
     load_model(model)
-    typer.echo(typer.style("✅ Model loaded!", fg=typer.colors.GREEN))
+    _LOGGER.info("✅ Model loaded!")
 
     wyoming_info = _create_wyoming_info(model)
 
