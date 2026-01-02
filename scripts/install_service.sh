@@ -8,8 +8,25 @@ PLIST_URL="https://raw.githubusercontent.com/basnijholt/wyoming-mlx-whisper/main
 
 echo "Installing Wyoming MLX Whisper service..."
 
-# Find uv path
-UV_PATH=$(which uv 2>/dev/null || echo "")
+# Find uv - prefer system paths over virtualenv
+find_uv() {
+    local paths=(
+        "$HOME/.local/bin/uv"
+        "/opt/homebrew/bin/uv"
+        "$HOME/.cargo/bin/uv"
+        "/usr/local/bin/uv"
+    )
+    for path in "${paths[@]}"; do
+        if [ -x "$path" ]; then
+            echo "$path"
+            return
+        fi
+    done
+    # Fallback to which
+    which uv 2>/dev/null || true
+}
+
+UV_PATH=$(find_uv)
 if [ -z "$UV_PATH" ]; then
     echo "Error: uv not found. Install it from https://docs.astral.sh/uv/"
     exit 1
@@ -31,7 +48,11 @@ curl -fsSL "$PLIST_URL" | \
 launchctl bootout gui/$UID "$PLIST_DST" 2>/dev/null || true
 
 # Load the service
-launchctl bootstrap gui/$UID "$PLIST_DST"
+if ! launchctl bootstrap gui/$UID "$PLIST_DST"; then
+    echo "Error: Failed to load service."
+    echo "Try running: launchctl bootstrap gui/$UID $PLIST_DST"
+    exit 1
+fi
 
 echo "Service installed and started."
 echo "Logs: $LOG_DIR/"
