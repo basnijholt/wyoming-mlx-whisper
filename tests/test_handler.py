@@ -100,10 +100,12 @@ class TestWhisperEventHandler:
         assert handler._audio == b""
 
     def test_reset(self, handler: WhisperEventHandler) -> None:
-        """Test audio buffer reset."""
+        """Test audio buffer and context reset."""
         handler._audio = b"some audio data"
+        handler._initial_prompt = "test prompt"
         handler._reset()
         assert handler._audio == b""
+        assert handler._initial_prompt is None
 
     @pytest.mark.asyncio
     async def test_handle_audio_chunk(self, handler: WhisperEventHandler) -> None:
@@ -198,6 +200,47 @@ class TestWhisperEventHandler:
         result = await handler.handle_event(event)
 
         assert result is True
+
+    @pytest.mark.asyncio
+    async def test_handle_transcribe_event_with_initial_prompt(
+        self,
+        handler: WhisperEventHandler,
+    ) -> None:
+        """Test handling of Transcribe event with initial_prompt in context."""
+        event = Transcribe(context={"initial_prompt": "Custom vocabulary"}).event()
+        result = await handler.handle_event(event)
+
+        assert result is True
+        assert handler._initial_prompt == "Custom vocabulary"
+
+    @pytest.mark.asyncio
+    async def test_handle_transcribe_event_without_context(
+        self,
+        handler: WhisperEventHandler,
+    ) -> None:
+        """Test handling of Transcribe event without context."""
+        event = Transcribe(context=None).event()
+        result = await handler.handle_event(event)
+
+        assert result is True
+        assert handler._initial_prompt is None
+
+    @pytest.mark.asyncio
+    async def test_transcribe_with_initial_prompt(
+        self,
+        handler: WhisperEventHandler,
+    ) -> None:
+        """Test that _transcribe passes initial_prompt when set."""
+        handler._initial_prompt = "Custom vocabulary hint"
+        audio = np.zeros(16000, dtype=np.float32)
+
+        with patch("wyoming_mlx_whisper.handler.mlx_whisper") as mock_mlx:
+            mock_mlx.transcribe.return_value = {"text": "transcribed text"}
+            result = handler._transcribe(audio)
+
+        assert result == "transcribed text"
+        call_args = mock_mlx.transcribe.call_args
+        assert call_args.kwargs["initial_prompt"] == "Custom vocabulary hint"
 
     @pytest.mark.asyncio
     async def test_handle_unknown_event(self, handler: WhisperEventHandler) -> None:

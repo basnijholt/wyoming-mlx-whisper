@@ -42,6 +42,7 @@ class WhisperEventHandler(AsyncEventHandler):
         self._language = language
         self._wyoming_info_event = wyoming_info.event()
         self._audio = b""
+        self._initial_prompt: str | None = None
         self._audio_converter = AudioChunkConverter(
             rate=_RATE,
             width=_WIDTH,
@@ -49,15 +50,18 @@ class WhisperEventHandler(AsyncEventHandler):
         )
 
     def _reset(self) -> None:
-        """Reset the audio buffer."""
+        """Reset the audio buffer and transcription context."""
         self._audio = b""
+        self._initial_prompt = None
 
     def _transcribe(self, audio: NDArray[np.float32]) -> str:
         """Transcribe audio using MLX Whisper."""
         start_time = time.time()
-        kwargs: dict[str, str] = {"path_or_hf_repo": self._model}
+        kwargs: dict[str, Any] = {"path_or_hf_repo": self._model}
         if self._language:
             kwargs["language"] = self._language
+        if self._initial_prompt:
+            kwargs["initial_prompt"] = self._initial_prompt
         result = mlx_whisper.transcribe(audio, **kwargs)
         elapsed = time.time() - start_time
         _LOGGER.debug("Transcription completed in %.2f seconds", elapsed)
@@ -98,6 +102,11 @@ class WhisperEventHandler(AsyncEventHandler):
             return await self._handle_audio_stop()
 
         if Transcribe.is_type(event.type):
+            transcribe = Transcribe.from_event(event)
+            if transcribe.context:
+                self._initial_prompt = transcribe.context.get("initial_prompt")
+                if self._initial_prompt:
+                    _LOGGER.debug("Using initial prompt: %s", self._initial_prompt)
             _LOGGER.debug("Transcribe event")
             return True
 
