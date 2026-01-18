@@ -106,7 +106,7 @@ class WhisperEventHandler(AsyncEventHandler):
             if transcribe.context:
                 self._initial_prompt = transcribe.context.get("initial_prompt")
                 if self._initial_prompt:
-                    _LOGGER.debug("Using initial prompt: %s", self._initial_prompt)
+                    _LOGGER.info("Using initial prompt: %s", self._initial_prompt)
             _LOGGER.debug("Transcribe event")
             return True
 
