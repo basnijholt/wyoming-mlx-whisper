@@ -117,20 +117,21 @@ tail -f ~/Library/Logs/wyoming-mlx-whisper/*.log
  Run the Wyoming MLX Whisper server.
 
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────╮
-│ --uri                         TEXT  unix:// or tcp://                                  │
-│                                     [env var: WHISPER_URI]                             │
-│                                     [default: tcp://0.0.0.0:10300]                     │
-│ --model                       TEXT  Name of MLX Whisper model to use                   │
-│                                     [env var: WHISPER_MODEL]                           │
-│                                     [default: mlx-community/whisper-large-v3-turbo]    │
-│ --language                    TEXT  Language code (e.g., 'en')                         │
-│                                     [env var: WHISPER_LANGUAGE]                        │
-│ --initial-prompt              TEXT  Initial prompt to guide Whisper recognition        │
-│                                     [env var: WHISPER_INITIAL_PROMPT]                  │
-│ --debug         --no-debug          Log DEBUG messages  [env var: WHISPER_DEBUG]       │
-│                                     [default: no-debug]                                │
-│ --version                           Print version and exit                             │
-│ --help      -h                      Show this message and exit.                        │
+│ --uri                               TEXT  unix:// or tcp://                            │
+│                                           [env var: WHISPER_URI]                       │
+│                                           [default: tcp://0.0.0.0:10300]               │
+│ --model                             TEXT  Name of MLX Whisper model to use             │
+│                                           [env var: WHISPER_MODEL]                     │
+│                                           [default:                                    │
+│                                           mlx-community/whisper-large-v3-turbo]        │
+│ --language                          TEXT  Language code (e.g., 'en')                   │
+│                                           [env var: WHISPER_LANGUAGE]                  │
+│ --initial-prompt                    TEXT  Initial prompt to guide Whisper recognition  │
+│                                           [env var: WHISPER_INITIAL_PROMPT]            │
+│ --debug               --no-debug          Log DEBUG messages  [env var: WHISPER_DEBUG] │
+│                                           [default: no-debug]                          │
+│ --version                                 Print version and exit                       │
+│ --help            -h                      Show this message and exit.                  │
 ╰────────────────────────────────────────────────────────────────────────────────────────╯
 
 ```
