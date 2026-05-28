@@ -47,6 +47,7 @@ class TestCLI:
         assert "Wyoming MLX Whisper" in output
         assert "--uri" in output
         assert "--model" in output
+        assert "--initial-prompt" in output
 
     def test_version_option(self, runner: CliRunner) -> None:
         """Test that --version works."""
@@ -71,6 +72,8 @@ class TestCLI:
                     "test-model",
                     "--language",
                     "en",
+                    "--initial-prompt",
+                    "Custom vocabulary",
                 ],
             )
 
@@ -80,6 +83,7 @@ class TestCLI:
             assert call_args[0][0] == "tcp://localhost:9999"  # uri
             assert call_args[0][1] == "test-model"  # model
             assert call_args[0][2] == "en"  # language
+            assert call_args[0][3] == "Custom vocabulary"  # initial_prompt
             assert call_args[1]["debug"] is False
 
     def test_main_with_debug(self, runner: CliRunner) -> None:
@@ -100,6 +104,7 @@ class TestCLI:
                     "WHISPER_URI": "tcp://env-host:8888",
                     "WHISPER_MODEL": "env-model",
                     "WHISPER_LANGUAGE": "fr",
+                    "WHISPER_INITIAL_PROMPT": "Env vocabulary",
                 },
             )
 
@@ -108,3 +113,4 @@ class TestCLI:
             assert call_args[0][0] == "tcp://env-host:8888"
             assert call_args[0][1] == "env-model"
             assert call_args[0][2] == "fr"
+            assert call_args[0][3] == "Env vocabulary"
