@@ -28,7 +28,7 @@ DEFAULT_MODEL = "mlx-community/whisper-large-v3-turbo"
 
 
 @app.command()
-def main(
+def main(  # noqa: PLR0913
     uri: Annotated[
         str,
         typer.Option(envvar="WHISPER_URI", help="unix:// or tcp://"),
@@ -40,6 +40,14 @@ def main(
     language: Annotated[
         str | None,
         typer.Option(envvar="WHISPER_LANGUAGE", help="Language code (e.g., 'en')"),
+    ] = None,
+    initial_prompt: Annotated[
+        str | None,
+        typer.Option(
+            "--initial-prompt",
+            envvar="WHISPER_INITIAL_PROMPT",
+            help="Initial prompt to guide Whisper recognition",
+        ),
     ] = None,
     debug: Annotated[  # noqa: FBT002
         bool,
@@ -66,14 +74,15 @@ def main(
         handlers=[RichHandler(rich_tracebacks=True, show_path=debug)],
     )
     _LOGGER.debug(
-        "model=%s, uri=%s, language=%s, debug=%s",
+        "model=%s, uri=%s, language=%s, initial_prompt=%s, debug=%s",
         model,
         uri,
         language,
+        initial_prompt,
         debug,
     )
 
-    run_server(uri, model, language, debug=debug)
+    run_server(uri, model, language, initial_prompt, debug=debug)
 
 
 def run() -> None:

@@ -107,6 +107,28 @@ class TestWhisperEventHandler:
         assert handler._audio == b""
         assert handler._initial_prompt is None
 
+    def test_reset_restores_configured_initial_prompt(
+        self,
+        mock_wyoming_info: Info,
+        mock_model: str,
+    ) -> None:
+        """Test reset restores the startup initial prompt."""
+        handler = WhisperEventHandler(
+            mock_wyoming_info,
+            mock_model,
+            language=None,
+            initial_prompt="Default vocabulary",
+            reader=MagicMock(),
+            writer=MagicMock(),
+        )
+        handler._audio = b"some audio data"
+        handler._initial_prompt = "request vocabulary"
+
+        handler._reset()
+
+        assert handler._audio == b""
+        assert handler._initial_prompt == "Default vocabulary"
+
     @pytest.mark.asyncio
     async def test_handle_audio_chunk(self, handler: WhisperEventHandler) -> None:
         """Test handling of audio chunks."""
@@ -241,6 +263,31 @@ class TestWhisperEventHandler:
         assert result == "transcribed text"
         call_args = mock_mlx.transcribe.call_args
         assert call_args.kwargs["initial_prompt"] == "Custom vocabulary hint"
+
+    @pytest.mark.asyncio
+    async def test_transcribe_with_configured_initial_prompt(
+        self,
+        mock_wyoming_info: Info,
+        mock_model: str,
+    ) -> None:
+        """Test that _transcribe passes the startup initial_prompt when set."""
+        handler = WhisperEventHandler(
+            mock_wyoming_info,
+            mock_model,
+            language=None,
+            initial_prompt="Default vocabulary hint",
+            reader=MagicMock(),
+            writer=MagicMock(),
+        )
+        audio = np.zeros(16000, dtype=np.float32)
+
+        with patch("wyoming_mlx_whisper.handler.mlx_whisper") as mock_mlx:
+            mock_mlx.transcribe.return_value = {"text": "transcribed text"}
+            result = handler._transcribe(audio)
+
+        assert result == "transcribed text"
+        call_args = mock_mlx.transcribe.call_args
+        assert call_args.kwargs["initial_prompt"] == "Default vocabulary hint"
 
     @pytest.mark.asyncio
     async def test_handle_unknown_event(self, handler: WhisperEventHandler) -> None:
