@@ -9,7 +9,7 @@ description = "Wyoming Server for MLX whisper"
 readme = "README.md"
 license = "MIT"
 authors = [
-    { name = "Bas Nijholt", email = "bas@nijholt.com" },
+    { name = "Bas Nijholt", email = "bas@nijho.lt" },
     { name = "Vincent Lin" },
 ]
 keywords = ["rhasspy", "wyoming", "mlx", "whisper", "stt"]
