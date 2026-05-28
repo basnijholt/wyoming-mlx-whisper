@@ -176,7 +176,9 @@ class TestRunServer:
             )
 
             mock_server.run.assert_awaited_once()
-            handler_factory = mock_server.run.await_args.args[0]
+            await_args = mock_server.run.await_args
+            assert await_args is not None
+            handler_factory = await_args.args[0]
             reader = MagicMock()
             writer = MagicMock()
             handler_factory(reader, writer)
