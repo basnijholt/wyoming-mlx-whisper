@@ -50,6 +50,7 @@ def run_server(
     uri: str,
     model: str,
     language: str | None,
+    initial_prompt: str | None = None,
     *,
     debug: bool,
 ) -> None:
@@ -73,6 +74,7 @@ def run_server(
                 wyoming_info,
                 model,
                 language,
+                initial_prompt,
                 *args,
                 **kwargs,
             ),

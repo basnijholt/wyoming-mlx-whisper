@@ -1,6 +1,7 @@
 """Tests for the server module."""
 
-from unittest.mock import patch
+import asyncio
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from wyoming_mlx_whisper import __version__
 from wyoming_mlx_whisper.const import WHISPER_LANGUAGES
@@ -146,3 +147,46 @@ class TestRunServer:
             # Check that 'auto' was used for language
             calls = " ".join(str(call) for call in mock_logger.info.call_args_list)
             assert "auto" in calls
+
+    def test_passes_initial_prompt_to_handler(self) -> None:
+        """Test that run_server passes the configured initial prompt to handlers."""
+        real_asyncio_run = asyncio.run
+        mock_server = MagicMock()
+        mock_server.run = AsyncMock()
+
+        with (
+            patch("wyoming_mlx_whisper.server._LOGGER"),
+            patch("wyoming_mlx_whisper.server.load_model"),
+            patch(
+                "wyoming_mlx_whisper.server.AsyncServer.from_uri",
+                return_value=mock_server,
+            ),
+            patch("wyoming_mlx_whisper.server.WhisperEventHandler") as mock_handler,
+            patch(
+                "wyoming_mlx_whisper.server.asyncio.run",
+                side_effect=lambda coro, debug: real_asyncio_run(coro, debug=debug),
+            ),
+        ):
+            run_server(
+                uri="tcp://localhost:10300",
+                model="test-model",
+                language="en",
+                initial_prompt="Custom vocabulary",
+                debug=False,
+            )
+
+            mock_server.run.assert_awaited_once()
+            await_args = mock_server.run.await_args
+            assert await_args is not None
+            handler_factory = await_args.args[0]
+            reader = MagicMock()
+            writer = MagicMock()
+            handler_factory(reader, writer)
+
+        mock_handler.assert_called_once()
+        call_args = mock_handler.call_args
+        assert call_args.args[1] == "test-model"
+        assert call_args.args[2] == "en"
+        assert call_args.args[3] == "Custom vocabulary"
+        assert call_args.args[4] is reader
+        assert call_args.args[5] is writer
